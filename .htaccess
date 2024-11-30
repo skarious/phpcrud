@@ -1,0 +1,36 @@
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # Si el directorio o archivo existe, úsalo directamente
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # De lo contrario, redirige a index.php
+    RewriteRule . index.php [L]
+</IfModule>
+
+# PHP configuración
+<IfModule mod_php.c>
+    php_value display_errors On
+    php_value mbstring.internal_encoding UTF-8
+    php_value upload_max_filesize 64M
+    php_value post_max_size 64M
+    php_value max_execution_time 300
+    php_value max_input_time 300
+</IfModule>
+
+# Seguridad adicional
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Prevenir acceso a archivos sensibles
+<FilesMatch "^(composer\.json|composer\.lock|package\.json|package-lock\.json|\.env|\.gitignore)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

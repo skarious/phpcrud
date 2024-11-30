@@ -1,28 +1,35 @@
+version: '3.8'
+
 services:
-  web:
-    build: .
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php_tasks
+    restart: unless-stopped
     ports:
       - "8080:80"
-    volumes:
-      - .:/var/www/html
-    depends_on:
-      - db
     environment:
       - MYSQL_HOST=db
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-photest}
-      - MYSQL_USER=${MYSQL_USER:-photest_user}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-photest_password}
+      - MYSQL_DATABASE=todo_db
+      - MYSQL_USER=todo_user
+      - MYSQL_PASSWORD=todo_password
+    depends_on:
+      - db
 
   db:
     image: mysql:8.0
+    container_name: mysql_tasks
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-photest}
-      MYSQL_USER: ${MYSQL_USER:-photest_user}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-photest_password}
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: todo_db
+      MYSQL_USER: todo_user
+      MYSQL_PASSWORD: todo_password
     volumes:
-      - db_data:/var/lib/mysql
-      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+      - mysql_data:/var/lib/mysql
+      - ./database.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --default-authentication-plugin=mysql_native_password
 
 volumes:
-  db_data:
+  mysql_data:

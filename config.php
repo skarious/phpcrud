@@ -4,10 +4,10 @@ $is_production = true; // Cambiar a false para desarrollo local
 
 if ($is_production) {
     // Configuración para EasyPanel
-    $host = getenv('MYSQL_HOST') ?: 'db';
-    $dbname = getenv('MYSQL_DATABASE') ?: 'todo_db';
-    $username = getenv('MYSQL_USER') ?: 'todo_user';
-    $password = getenv('MYSQL_PASSWORD') ?: 'todo_password';
+    $host = getenv('DB_HOST') ?: 'localhost';  // EasyPanel usa localhost
+    $dbname = getenv('DB_DATABASE') ?: 'todo_db';
+    $username = getenv('DB_USERNAME') ?: 'root';
+    $password = getenv('DB_PASSWORD') ?: '';
 } else {
     // Configuración para desarrollo local
     $host = getenv('MYSQL_HOST') ?: 'db';

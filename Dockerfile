@@ -21,9 +21,12 @@ RUN echo "upload_max_filesize = 64M" >> "$PHP_INI_DIR/php.ini" \
     && echo "max_input_time = 300" >> "$PHP_INI_DIR/php.ini"
 
 # Configurar el DocumentRoot de Apache
-ENV APACHE_DOCUMENT_ROOT /var/www/html
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+# Crear directorio public
+RUN mkdir -p /var/www/html/public
 
 # Directorio de trabajo
 WORKDIR /var/www/html
@@ -31,9 +34,12 @@ WORKDIR /var/www/html
 # Copiar archivos del proyecto
 COPY . /var/www/html/
 
+# Mover archivos PHP a public
+RUN mv /var/www/html/*.php /var/www/html/public/ || true
+
 # Establecer permisos correctos
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
-# Exponer puerto 80
+# Puerto por defecto de Apache
 EXPOSE 80

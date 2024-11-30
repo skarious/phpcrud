@@ -1,0 +1,24 @@
+# Archivos y carpetas específicos de Docker
+/mysql_data
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de IDE
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Archivos de dependencias y logs
+/vendor/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Variables de entorno
+.env
+.env.local
+.env.*.local
